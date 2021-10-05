@@ -1,0 +1,45 @@
+<?php
+
+namespace {{ namespace }};
+
+use GitBalocco\LaravelUiCli\CliParameter;
+use GitBalocco\LaravelUiCli\Contract\CliParameterInterface;
+
+/**
+ * Class {{ class }}
+ * @package {{ namespace }}
+ */
+class {{ class }} extends CliParameter implements CliParameterInterface
+{
+    /**
+     * rules
+     * @return array
+     */
+    protected function rules(): array
+    {
+        //以下に、コマンドライン引数、オプションに対するバリデーションルールを定義してください。
+        return [];
+    }
+
+    /**
+     * messages
+     * @return array
+     */
+    protected function messages(): array
+    {
+        //以下に、バリデーションルールに対して適用するカスタムメッセージを定義してください。
+        //メッセージのカスタマイズが不要な場合、このメソッドは削除して構いません。
+        return [];
+    }
+
+    /**
+     * attributes
+     * @return array
+     */
+    protected function attributes(): array
+    {
+        //バリデーション属性のカスタマイズを行いたい場合に実装してください。
+        //不要な場合、このメソッドは削除して構いません。
+        return [];
+    }
+}

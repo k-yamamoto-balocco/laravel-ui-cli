@@ -1,0 +1,17 @@
+<?php
+
+namespace {{ namespace }};
+
+use GitBalocco\LaravelUiCli\CliHandler;
+use GitBalocco\LaravelUiCli\Contract\CliHandlerInterface;
+
+/**
+ * Class {{ class }}
+ * @package {{ namespace }}
+ */
+class {{ class }} extends CliHandler implements CliHandlerInterface{
+
+    public function __construct()
+    {
+    }
+}

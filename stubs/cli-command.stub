@@ -1,0 +1,65 @@
+<?php
+
+namespace {{ namespace }};
+
+use GitBalocco\LaravelUiCli\CliCommand;
+use GitBalocco\LaravelUiCli\Contract\CliHandlerInterface;
+use GitBalocco\LaravelUiCli\Contract\CliCommandInterface;
+{{ use-parameter-class }}
+{{ use-handler-class }}
+
+/**
+ * Class {{ class }}
+ * @package {{ namespace }}
+ * @method {{ parameter-class }} getCliParameter()
+ * @method {{ handler-class }} getCliHandler()
+ */
+class {{ class }} extends CliCommand implements CliCommandInterface
+{
+    /** @var string $signature The name and signature of the console command. */
+    protected $signature = '{{ command }}';
+
+    /** @var string $description The console command description. */
+    protected $description = 'Command description';
+
+    /** @var string $parameterClassName CliParameterInterfaceを実装した、引数の管理を担当するクラス名。*/
+    protected $parameterClassName = {{ parameter-class }}::class;
+
+    /**
+     * createCliHandler
+     * @return CliHandlerInterface
+     */
+    public function createCliHandler(): CliHandlerInterface
+    {
+        // 以下に、CliHandlerの依存関係を解決してインスタンスを作成する処理を実装してください。
+        // このメソッドは、引数でメソッドインジェクションが可能です。
+        // このメソッドが返却したオブジェクトは、getCliHandler() メソッドで取得可能です。
+        return new {{ handler-class }}();
+    }
+
+    /**
+     * initCliCommand
+     * @return void
+     */
+    public function initCliCommand(): void
+    {
+        // 以下にCliCommandの初期化処理を実装してください。
+        // このメソッドは、引数でメソッドインジェクションが可能です。
+        // 移譲先のオブジェクトをプロパティにセットする等
+        // __construct() handle() の代わりに、このメソッド内でCliCommandクラスの初期化を実施するコードを実装してください。
+        // 初期化処理が不要な場合、このメソッドは削除して構いません。
+    }
+
+    /**
+     * handle
+     * @return int
+     */
+    public function handle(): int
+    {
+        //以下にコマンドの処理本体を実装します。
+        //入出力以外の処理内容は CliHandlerに移譲しましょう。
+        //通常のArtisanCommandと異なり、handle() メソッドでのメソッドインジェクションは利用できません。
+        $handler = $this->getCliHandler();
+        return 0;
+    }
+}
