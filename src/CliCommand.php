@@ -66,7 +66,8 @@ abstract class CliCommand extends Command implements CliCommandInterface
             if (!class_exists($className)) {
                 throw new \Exception('');
             }
-            $object = new $className($argument);
+            //パラメタクラスのコンストラクタインジェクションに対応
+            $object = $this->getLaravel()->make($className, ['argumentsAndOptions' => $argument]);
             if (!is_subclass_of($object, CliParameterInterface::class)) {
                 throw new \Exception('');
             }
@@ -168,5 +169,29 @@ abstract class CliCommand extends Command implements CliCommandInterface
     protected function getCliHandler(): CliHandlerInterface
     {
         return $this->cliHandler;
+    }
+
+    /**
+     * createCliHandlerDefault
+     * 機能改善のため追加 ハンドラのコンストラクタインジェクションを利用し易いようにデフォルトの動作を追加。
+     * @return CliHandlerInterface
+     * @author kenji yamamoto <k.yamamoto@balocco.info>
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    protected function createCliHandlerDefault():CliHandlerInterface{
+        if(!$this->handlerClassName){
+            return new DefaultHandler();
+        }
+        if (!class_exists($this->handlerClassName)) {
+            //存在しない
+            throw new \Exception('');
+        }
+        //ハンドラのコンストラクタインジェクションに対応
+        $object = $this->getLaravel()->make($this->handlerClassName, ['parameter' => $this->getCliParameter()]);
+        if (!is_subclass_of($object, CliHandlerInterface::class)) {
+            //適切なインターフェースを実装していない
+            throw new \Exception('');
+        }
+        return $object;
     }
 }
