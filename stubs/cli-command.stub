@@ -26,7 +26,7 @@ class {{ class }} extends CliCommand implements CliCommandInterface
     protected $parameterClassName = {{ parameter-class }}::class;
 
     /** @var string $handlerClassName CliHandlerInterfaceを実装した、処理を担当するクラス名。*/
-    protected $handlerClassName = {{ handler-class }}::class;
+    protected string $handlerClassName = {{ handler-class }}::class;
 
     /**
      * createCliHandler
