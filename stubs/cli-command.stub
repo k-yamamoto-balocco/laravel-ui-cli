@@ -25,15 +25,20 @@ class {{ class }} extends CliCommand implements CliCommandInterface
     /** @var string $parameterClassName CliParameterInterfaceを実装した、引数の管理を担当するクラス名。*/
     protected $parameterClassName = {{ parameter-class }}::class;
 
+    /** @var string $handlerClassName CliHandlerInterfaceを実装した、処理を担当するクラス名。*/
+    protected $handlerClassName = {{ handler-class }}::class;
+
     /**
      * createCliHandler
      * @return CliHandlerInterface
      */
     public function createCliHandler(): CliHandlerInterface
     {
-        // 以下に、CliHandlerの依存関係を解決してインスタンスを作成する処理を実装してください。
+        // CliHandlerクラスの初期化を詳細に実装したい場合、このメソッド内でインスタンスを作成する処理を実装してください。
         // このメソッドは、引数でメソッドインジェクションが可能です。
         // このメソッドが返却したオブジェクトは、getCliHandler() メソッドで取得可能です。
+        // インスタンス作成処理が不要な場合、このメソッドは削除して構いません。
+        // 削除した場合、ハンドラクラスの作成はCliCommandクラスのcreateCliHandlerDefault()が行います。
         return new {{ handler-class }}();
     }
 

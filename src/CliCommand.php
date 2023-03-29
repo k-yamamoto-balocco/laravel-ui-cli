@@ -185,7 +185,6 @@ abstract class CliCommand extends Command implements CliCommandInterface
      * createCliHandlerDefault
      * 機能改善のため追加 ハンドラのコンストラクタインジェクションを利用し易いようにデフォルトの動作を追加。
      * @return CliHandlerInterface
-     * @author kenji yamamoto <k.yamamoto@balocco.info>
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function createCliHandlerDefault():CliHandlerInterface{
