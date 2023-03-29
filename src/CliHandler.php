@@ -22,4 +22,10 @@ abstract class CliHandler implements CliHandlerInterface
     {
         $this->exitStatus = $exitStatus;
     }
+
+    protected function getParameter(): CliParameterInterface
+    {
+        return $this->parameter;
+    }
+
 }
