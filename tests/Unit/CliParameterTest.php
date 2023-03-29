@@ -73,9 +73,9 @@ class CliParameterTest extends TestCase
         $actual = $targetClass->get('opt-name2');
         $this->assertSame('opt-value2', $actual);
 
-        //テスト対象メソッドの実行3（存在しないパラメタ名を指定した場合、例外が発生する）
-        $this->expectException(\ErrorException::class);
-        $targetClass->get('opt-name-not-exists');
+        //テスト対象メソッドの実行3（存在しないパラメタ名を指定した場合、NULLが返却される）
+        $actual = $targetClass->get('opt-name-not-exists');
+        $this->assertNull($actual);
     }
 
     /**

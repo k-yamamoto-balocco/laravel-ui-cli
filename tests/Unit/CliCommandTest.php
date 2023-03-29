@@ -52,13 +52,20 @@ class CliCommandTest extends TestCase
     public function test_createCliParameter()
     {
         $targetClass = \Mockery::mock($this->testClassName)->shouldAllowMockingProtectedMethods()->makePartial();
+
         $stubParameter = new class() implements CliParameterInterface {
             public function validator(): ValidatorContract
             {
                 return Validator::make([]);
             }
         };
+
         $targetClass->shouldReceive('getParameterClassName')->once()->andReturn(get_class($stubParameter));
+        //インスタンス作成部分をテスト用に差し替え
+        $targetClass->shouldReceive('getLaravel->make')
+            ->andReturn($stubParameter);
+
+
         $actual = $targetClass->createCliParameter([]);
         $this->assertInstanceOf(get_class($stubParameter), $actual);
     }
@@ -104,7 +111,7 @@ class CliCommandTest extends TestCase
     /**
      * @covers ::execute
      */
-    public function test_execute_正常系DoesntHaveInitMethod()
+    public function test_execute_WithDefaultHandler()
     {
         $targetClass = \Mockery::mock($this->testClassName)->shouldAllowMockingProtectedMethods()->makePartial();
         $stubInput = \Mockery::mock(InputInterface::class);
@@ -120,10 +127,11 @@ class CliCommandTest extends TestCase
 
         $targetClass->shouldReceive('createDataToValidate')->once()->andReturn([]);
         $targetClass->shouldReceive('createCliParameter')->once()->andReturn($stubParameter);
-        $targetClass->shouldReceive('getLaravel->call')
-            ->with([$targetClass, 'createCliHandler'])
+        //デフォルトのハンドラ作成メソッドが呼び出される
+        $targetClass->shouldReceive('createCliHandlerDefault')
             ->once()
             ->andReturn($stubHandler);
+
         $targetClass->shouldReceive('initCliCommandMethodExists')->once()->andReturn(false);
 
         //最後に、親クラスのexecuteに処理を引き渡す
@@ -181,6 +189,7 @@ class CliCommandTest extends TestCase
 
         $stubInput = \Mockery::mock(InputInterface::class);
         $stubOutput = \Mockery::mock(OutputInterface::class);
+        $stubHandler = \Mockery::mock(CliHandlerInterface::class);
 
         $stubParameter = new class() implements CliParameterInterface {
             public function validator(): ValidatorContract
@@ -191,9 +200,13 @@ class CliCommandTest extends TestCase
 
         $targetClass->shouldReceive('createDataToValidate')->once()->andReturn([]);
         $targetClass->shouldReceive('createCliParameter')->once()->andReturn($stubParameter);
-        $targetClass->shouldReceive('getLaravel->call')->with([$targetClass, 'createCliHandler'])->once();
+//        $targetClass->shouldReceive('getLaravel->call')->with([$targetClass, 'createCliHandler'])->once();
         $targetClass->shouldReceive('initCliCommandMethodExists')->once()->andReturn(true);
         $targetClass->shouldReceive('getLaravel->call')->with([$targetClass, 'initCliCommand'])->once();
+        //デフォルトのハンドラ作成メソッドが呼び出される
+        $targetClass->shouldReceive('createCliHandlerDefault')
+            ->once()
+            ->andReturn($stubHandler);
 
         //最後に、親クラスのexecuteに処理を引き渡す
         $targetClass->shouldReceive('parentExecute')
@@ -210,7 +223,7 @@ class CliCommandTest extends TestCase
      * execute() が正常に実行された後にのみgetCliHandler() が利用できる
      * @param mixed $depends
      * @covers ::getCliHandler
-     * @depends test_execute_正常系DoesntHaveInitMethod
+     * @depends test_execute_WithDefaultHandler
      */
     public function test_getCliHandler($depends)
     {
@@ -224,7 +237,7 @@ class CliCommandTest extends TestCase
      * execute() が正常に実行された後にのみgetCliParameter() が利用できる
      * @param mixed $depends
      * @covers ::getCliParameter
-     * @depends test_execute_正常系DoesntHaveInitMethod
+     * @depends test_execute_WithDefaultHandler
      */
     public function test_getCliParameter($depends)
     {

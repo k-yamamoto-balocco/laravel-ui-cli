@@ -78,7 +78,7 @@ abstract class CliParameter implements CliParameterInterface
      * 個々の実装を担当するCliParameterのサブクラスにおいてgetterを整備する際に利用することを意図した汎用getter。
      * パラメータ名文字列を直接記述する箇所がこのサブクラス内のみに限定されるようprotectedとしている。
      * また、外部からの呼び出しを想定していないため、意図しないパラメータ名文字列が与えられることも考慮しない。
-     * （存在しないパラメータ名を指定した場合、例外が発生する。）
+     * 存在しないパラメータ名を指定した場合、結果はnullとなる。
      * このget()を利用し、コマンドライン引数、オプションにアクセスするためのgetterを各サブクラスに実装すること。
      * @param string $key
      * @return mixed
@@ -86,6 +86,6 @@ abstract class CliParameter implements CliParameterInterface
     protected function get(string $key)
     {
         $arguments = $this->getArgumentsAndOptions();
-        return $arguments[$key];
+        return $arguments[$key]??null;
     }
 }
