@@ -22,6 +22,8 @@ abstract class CliCommand extends Command implements CliCommandInterface
     /** @var CliHandlerInterface $cliHandler */
     private $cliHandler;
 
+    private string $handlerClassName = DefaultHandler::class;
+
     /**
      * CliCommand constructor.
      */
@@ -31,10 +33,12 @@ abstract class CliCommand extends Command implements CliCommandInterface
     }
 
     /**
+     * execute
+     *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @psalm-suppress InvalidArgument
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     final protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -44,8 +48,14 @@ abstract class CliCommand extends Command implements CliCommandInterface
         //バリデーションを実行
         $this->validateWithCliParameter();
 
-        //Handlerをセット
-        $this->cliHandler = $this->getLaravel()->call([$this, 'createCliHandler']);
+        //Handlerのセット
+        if(method_exists($this,'createCliHandler')){
+            //サブクラスにcreateCliHandler()が定義されている場合は使用する
+            $this->cliHandler = $this->getLaravel()->call([$this, 'createCliHandler']);
+        }else{
+            //デフォルトの動作。
+            $this->cliHandler = $this->createCliHandlerDefault();
+        }
 
         //コマンドクラスの初期化処理
         if ($this->initCliCommandMethodExists()) {
