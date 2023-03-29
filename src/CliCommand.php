@@ -22,7 +22,7 @@ abstract class CliCommand extends Command implements CliCommandInterface
     /** @var CliHandlerInterface $cliHandler */
     private $cliHandler;
 
-    private string $handlerClassName = DefaultHandler::class;
+    protected string $handlerClassName = DefaultHandler::class;
 
     /**
      * CliCommand constructor.
