@@ -4,10 +4,12 @@ namespace {{ namespace }};
 
 use GitBalocco\LaravelUiCli\CliHandler;
 use GitBalocco\LaravelUiCli\Contract\CliHandlerInterface;
+{{ use-parameter-class }}
 
 /**
  * Class {{ class }}
  * @package {{ namespace }}
+ * @method {{ parameter-class }} getParameter()
  */
 class {{ class }} extends CliHandler implements CliHandlerInterface{
 

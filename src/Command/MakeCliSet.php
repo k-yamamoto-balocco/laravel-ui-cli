@@ -18,7 +18,7 @@ class MakeCliSet extends Command
         $parameterClass = $name . 'Parameter';
         $handlerClass = $name . 'Handler';
 
-        Artisan::call('make:cli-handler', ['name' => $handlerClass]);
+        Artisan::call('make:cli-handler', ['name' => $handlerClass,'parameter-class' => $parameterClass]);
         Artisan::call('make:cli-parameter', ['name' => $parameterClass]);
         Artisan::call(
             'make:cli-command',
