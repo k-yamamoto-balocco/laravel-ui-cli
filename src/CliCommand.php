@@ -42,6 +42,11 @@ abstract class CliCommand extends Command implements CliCommandInterface
      */
     final protected function execute(InputInterface $input, OutputInterface $output)
     {
+        //コマンドクラスの初期化処理
+        if ($this->initCliCommandMethodExists()) {
+            $this->getLaravel()->call([$this, 'initCliCommand']);
+        }
+
         //CliParameterをセット
         $this->cliParameter = $this->createCliParameter($this->createDataToValidate());
 
@@ -55,11 +60,6 @@ abstract class CliCommand extends Command implements CliCommandInterface
         }else{
             //デフォルトの動作。
             $this->cliHandler = $this->createCliHandlerDefault();
-        }
-
-        //コマンドクラスの初期化処理
-        if ($this->initCliCommandMethodExists()) {
-            $this->getLaravel()->call([$this, 'initCliCommand']);
         }
         //親クラスのexecuteを実行
         return $this->parentExecute($input, $output);
