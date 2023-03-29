@@ -13,5 +13,9 @@ class {{ class }} extends CliHandler implements CliHandlerInterface{
 
     public function __invoke()
     {
+        //implement here.
+
+        //Set exit status according to processing result.
+        $this->setExitStatus(0);
     }
 }

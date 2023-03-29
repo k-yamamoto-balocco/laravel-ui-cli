@@ -39,7 +39,7 @@ class {{ class }} extends CliCommand implements CliCommandInterface
         // このメソッドが返却したオブジェクトは、getCliHandler() メソッドで取得可能です。
         // インスタンス作成処理が不要な場合、このメソッドは削除して構いません。
         // 削除した場合、ハンドラクラスの作成はCliCommandクラスのcreateCliHandlerDefault()が行います。
-        return new {{ handler-class }}();
+        return new {{ handler-class }}($this->getCliParameter());
     }
 
     /**
@@ -64,7 +64,7 @@ class {{ class }} extends CliCommand implements CliCommandInterface
         //以下にコマンドの処理本体を実装します。
         //入出力以外の処理内容は CliHandlerに移譲しましょう。
         //通常のArtisanCommandと異なり、handle() メソッドでのメソッドインジェクションは利用できません。
-        $handler = $this->getCliHandler();
-        return 0;
+        $handler = $this->getCliHandler()->__invoke();
+        return $this->getCliHandler()->getExitCode();
     }
 }
