@@ -40,7 +40,7 @@ abstract class CliCommand extends Command implements CliCommandInterface
      * @return int
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    final protected function execute(InputInterface $input, OutputInterface $output)
+    final protected function execute(InputInterface $input, OutputInterface $output): int
     {
         //コマンドクラスの初期化処理
         if ($this->initCliCommandMethodExists()) {
